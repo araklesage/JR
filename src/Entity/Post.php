@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,58 +18,154 @@ class Post
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255)
      */
-    private $Title;
+    private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(name="content", type="text")
      */
     private $content;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
-    public function getId(): ?int
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="draft", type="boolean")
+     */
+    private $draft = false;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="post")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post", cascade={"remove"})
+     */
+    private $comments;
+
+    public function __construct()
+    {
+        $this->date = new \Datetime();
+        $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
     {
-        return $this->Title;
+        $this->id = $id;
     }
 
-    public function setTitle(string $Title): self
+    /**
+     * @return mixed
+     */
+    public function getTitle()
     {
-        $this->Title = $Title;
-
-        return $this;
+        return $this->title;
     }
 
-    public function getContent(): ?string
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
     {
         $this->content = $content;
-
-        return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    /**
+     * @return mixed
+     */
+    public function getDate()
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date): void
     {
         $this->date = $date;
-
-        return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDraft(): bool
+    {
+        return $this->draft;
+    }
+
+    /**
+     * @param bool $draft
+     */
+    public function setDraft(bool $draft): void
+    {
+        $this->draft = $draft;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category): void
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param mixed $comments
+     */
+    public function setComments($comments): void
+    {
+        $this->comments = $comments;
+    }
+
+
 }
